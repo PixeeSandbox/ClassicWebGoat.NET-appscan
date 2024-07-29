@@ -13,5 +13,5 @@ jobs:
     steps:
       - uses: pixee/upload-tool-results-action@v2
         with:
-          tool: appcan
+          tool: appscan
           file: appscan-results.sarif.json
