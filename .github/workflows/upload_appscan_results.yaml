@@ -11,6 +11,7 @@ jobs:
     name: Upload AppScan Results to Pixeebot
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: pixee/upload-tool-results-action@v2
         with:
           tool: appscan
