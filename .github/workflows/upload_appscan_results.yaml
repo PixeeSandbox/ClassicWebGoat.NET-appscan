@@ -1,0 +1,17 @@
+name: "Publish AppScan SARIF to Pixee"
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  share:
+    name: Upload AppScan Results to Pixeebot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pixee/upload-tool-results-action@v2
+        with:
+          tool: appcan
+          file: appscan-results.sarif.json
