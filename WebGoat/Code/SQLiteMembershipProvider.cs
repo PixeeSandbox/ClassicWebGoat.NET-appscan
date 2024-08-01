@@ -353,7 +353,7 @@ namespace TechInfoSystems.Data.SQLite
 
 					cmd.Parameters.AddWithValue ("$Password", encodedPwd);
 					cmd.Parameters.AddWithValue ("$LastPasswordChangedDate", DateTime.UtcNow);
-					cmd.Parameters.AddWithValue ("$Username", username.ToLowerInvariant ());
+					cmd.Parameters.AddWithValue ("@Username", username.ToLowerInvariant ());
 					cmd.Parameters.AddWithValue ("$ApplicationId", _applicationId);
 
 					if (cn.State == ConnectionState.Closed)
@@ -632,7 +632,7 @@ namespace TechInfoSystems.Data.SQLite
 					// Get UserId if necessary.
 					string userId = null;
 					if (deleteAllRelatedData) {
-						cmd.CommandText = "SELECT UserId FROM " + USER_TB_NAME + " WHERE LoweredUsername = $Username AND ApplicationId = $ApplicationId";
+						cmd.CommandText = "SELECT UserId FROM " + USER_TB_NAME + " WHERE LoweredUsername = @Username AND ApplicationId = @ApplicationId";
 
 						cmd.Parameters.AddWithValue ("$Username", username.ToLowerInvariant ());
 						cmd.Parameters.AddWithValue ("$ApplicationId", _applicationId);

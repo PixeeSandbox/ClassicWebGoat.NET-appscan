@@ -94,7 +94,7 @@ namespace OWASP.WebGoat.NET
 			var output = string.Empty;
 			
 			try {
-				output = (string)cmd.ExecuteScalar ();
+				output = (string)cmd.ExecuteScalar (parameters);
 			} catch (SqliteException ex) {
 				output += "<br/>SQL Exception: " + ex.Message + " - ";
 				output += SQL;
@@ -201,7 +201,7 @@ namespace OWASP.WebGoat.NET
 		{
 			if (userid.Length > 4)
 				userid = userid.Substring (0, 4);
-			String output = (String)DoScalar ("SELECT Email FROM UserList WHERE UserID = '" + userid + "'", GetGoatDBConnection ());
+			String output = (String)DoScalar ("SELECT Email FROM UserList WHERE UserID = @userid", GetGoatDBConnection (), new object[] { userid });
 			if (output != null)
 				return output;
 			else 
