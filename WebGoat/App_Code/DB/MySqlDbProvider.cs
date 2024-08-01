@@ -115,8 +115,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             string encoded_password = Encoder.Encode(password);
             
             //check email/password
-            string sql = "select * from CustomerLogin where email = '" + email + 
-                "' and password = '" + encoded_password + "';";
+            string sql = "select * from CustomerLogin where email = @email and password = @password;";
                         
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
@@ -149,7 +148,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             try
             {
                 //get data
-                string sql = "select * from CustomerLogin where email = '" + email + "';";
+                string sql = "select * from CustomerLogin where email = @email;";
                 
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
@@ -200,7 +199,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
-                    string sql = "select email from CustomerLogin where customerNumber = " + customerNumber;
+                    string sql = "select email from CustomerLogin where customerNumber = @customerNumber";
                     MySqlCommand command = new MySqlCommand(sql, connection);
                     output = command.ExecuteScalar().ToString();
                 } 
@@ -351,7 +350,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     //get data
-                    string sql = "select * from CustomerLogin where email = '" + email + "';";
+                    string sql = "select * from CustomerLogin where email = @email;";
                     MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
                     DataSet ds = new DataSet();
                     da.Fill(ds);
@@ -391,7 +390,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
         
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                string sql = "select * from Orders where customerNumber = " + customerID;
+                string sql = "select * from Orders where customerNumber = @customerID";
                 MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -412,11 +411,11 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                sql = "select * from Products where productCode = '" + productCode + "'";
+                sql = "select * from Products where productCode = @productCode";
                 da = new MySqlDataAdapter(sql, connection);
                 da.Fill(ds, "products");
 
-                sql = "select * from Comments where productCode = '" + productCode + "'";
+                sql = "select * from Comments where productCode = @productCode";
                 da = new MySqlDataAdapter(sql, connection);
                 da.Fill(ds, "comments");
 
@@ -459,7 +458,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
-                string sql = "select * from Payments where customerNumber = " + customerNumber;
+                string sql = "select * from Payments where customerNumber = @customerNumber";
                 MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
                 DataSet ds = new DataSet();
                 da.Fill(ds);
@@ -492,11 +491,11 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
 
-                sql = "select * from Categories" + catClause;
+                sql = "select * from Categories where catNumber = @catNumber";
                 da = new MySqlDataAdapter(sql, connection);
                 da.Fill(ds, "categories");
 
-                sql = "select * from Products" + catClause;
+                sql = "select * from Products where catNumber = @catNumber";
                 da = new MySqlDataAdapter(sql, connection);
                 da.Fill(ds, "products");
 
@@ -536,7 +535,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             try
             {
             
-                output = (String)MySqlHelper.ExecuteScalar(_connectionString, "select email from CustomerLogin where customerNumber = " + num);
+                output = (String)MySqlHelper.ExecuteScalar(_connectionString, "select email from CustomerLogin where customerNumber = @num");
                 /*using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     string sql = "select email from CustomerLogin where customerNumber = " + num;
@@ -556,7 +555,7 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
         public DataSet GetCustomerEmails(string email)
         {
-            string sql = "select email from CustomerLogin where email like '" + email + "%'";
+            string sql = "select email from CustomerLogin where email like @email";
             
             
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
