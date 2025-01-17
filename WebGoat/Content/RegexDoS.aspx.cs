@@ -20,7 +20,7 @@ namespace OWASP.WebGoat.NET
             string userName = txtUsername.Text;
             string password = txtPassword.Text;
 
-            Regex testPassword = new Regex(userName);
+            Regex testPassword = new Regex(Regex.Escape(userName));
             Match match = testPassword.Match(password);
             if (match.Success)
             {
@@ -33,4 +33,3 @@ namespace OWASP.WebGoat.NET
         }
     }
 }
-
