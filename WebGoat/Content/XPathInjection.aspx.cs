@@ -25,8 +25,12 @@ namespace OWASP.WebGoat.NET
         {
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(xml);
-            XmlNodeList list = xDoc.SelectNodes("//salesperson[state='" + state + "']");
-            if (list.Count > 0)
+            XPathNavigator navigator = xDoc.CreateNavigator();
+            XPathExpression expr = navigator.Compile("//salesperson[state=$state]");
+            expr.SetContext(new XmlNamespaceManager(xDoc.NameTable));
+            expr.AddVariable("state", state);
+            XPathNodeIterator nodes = navigator.Select(expr);
+            if (nodes.Count > 0)
             {
 
             }
@@ -34,4 +38,3 @@ namespace OWASP.WebGoat.NET
         }
     }
 }
-
