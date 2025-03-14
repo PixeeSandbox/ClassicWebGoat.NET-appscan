@@ -115,12 +115,13 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             string encoded_password = Encoder.Encode(password);
             
             //check email/password
-            string sql = "select * from CustomerLogin where email = '" + email + 
-                "' and password = '" + encoded_password + "';";
+            string sql = "select * from CustomerLogin where email = @Email and password = @Password;";
                         
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
+                da.SelectCommand.Parameters.AddWithValue("@Email", email);
+                da.SelectCommand.Parameters.AddWithValue("@Password", encoded_password);
             
                 //TODO: User reader instead (for all calls)
                 DataSet ds = new DataSet();
@@ -149,11 +150,12 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             try
             {
                 //get data
-                string sql = "select * from CustomerLogin where email = '" + email + "';";
+                string sql = "select * from CustomerLogin where email = @Email;";
                 
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     MySqlDataAdapter da = new MySqlDataAdapter(sql, connection);
+                    da.SelectCommand.Parameters.AddWithValue("@Email", email);
                     DataSet ds = new DataSet();
                     da.Fill(ds);
 
@@ -191,7 +193,6 @@ namespace OWASP.WebGoat.NET.App_Code.DB
 
             return error_message;    
         }
-
         public string GetCustomerEmail(string customerNumber)
         {
             string output = null;
@@ -200,8 +201,9 @@ namespace OWASP.WebGoat.NET.App_Code.DB
             
                 using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
-                    string sql = "select email from CustomerLogin where customerNumber = " + customerNumber;
+                    string sql = "select email from CustomerLogin where customerNumber = @customerNumber";
                     MySqlCommand command = new MySqlCommand(sql, connection);
+                    command.Parameters.AddWithValue("@customerNumber", customerNumber);
                     output = command.ExecuteScalar().ToString();
                 } 
             }

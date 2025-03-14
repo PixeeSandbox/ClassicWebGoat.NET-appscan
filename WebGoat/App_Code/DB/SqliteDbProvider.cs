@@ -69,21 +69,24 @@ namespace OWASP.WebGoat.NET.App_Code.DB
                 return ds;
             }
         }
-
+        
         public bool IsValidCustomerLogin(string email, string password)
         {
             //encode password
             string encoded_password = Encoder.Encode(password);
             
             //check email/password
-            string sql = "select * from CustomerLogin where email = '" + email + "' and password = '" + 
-                         encoded_password + "';";
+            string sql = "select * from CustomerLogin where email = @Email and password = @Password;";
                         
             using (SqliteConnection connection = new SqliteConnection(_connectionString))
             {
                 connection.Open();
+                
+                SqliteCommand command = new SqliteCommand(sql, connection);
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Password", encoded_password);
 
-                SqliteDataAdapter da = new SqliteDataAdapter(sql, connection);
+                SqliteDataAdapter da = new SqliteDataAdapter(command);
             
                 //TODO: User reader instead (for all calls)
                 DataSet ds = new DataSet();
@@ -187,8 +190,9 @@ namespace OWASP.WebGoat.NET.App_Code.DB
                 {
                     connection.Open();
 
-                    string sql = "select email from CustomerLogin where customerNumber = " + customerNumber;
+                    string sql = "select email from CustomerLogin where customerNumber = @customerNumber";
                     SqliteCommand command = new SqliteCommand(sql, connection);
+                    command.Parameters.AddWithValue("@customerNumber", customerNumber);
                     output = command.ExecuteScalar().ToString();
                 } 
             }
