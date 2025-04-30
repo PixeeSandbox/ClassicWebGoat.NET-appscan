@@ -11,7 +11,6 @@ namespace OWASP.WebGoat.NET
         {
 
         }
-
         /// <summary>
         /// Code from https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS
         /// </summary>
@@ -20,7 +19,7 @@ namespace OWASP.WebGoat.NET
             string userName = txtUsername.Text;
             string password = txtPassword.Text;
 
-            Regex testPassword = new Regex(userName);
+            Regex testPassword = new Regex(Regex.Escape(userName));
             Match match = testPassword.Match(password);
             if (match.Success)
             {
