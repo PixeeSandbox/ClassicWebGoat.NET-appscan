@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
 using System.Xml.XPath;
+using System.Text;
 
 namespace OWASP.WebGoat.NET
 {
@@ -25,13 +26,37 @@ namespace OWASP.WebGoat.NET
         {
             XmlDocument xDoc = new XmlDocument();
             xDoc.LoadXml(xml);
-            XmlNodeList list = xDoc.SelectNodes("//salesperson[state='" + state + "']");
+            XmlNodeList list = xDoc.SelectNodes("//salesperson[state=" + EscapeXPathValue(state) + "]");
             if (list.Count > 0)
             {
 
             }
 
         }
+
+        private string EscapeXPathValue(string value)
+        {
+            if (value.Contains("'"))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("concat(");
+                string[] parts = value.Split('\'');
+                for (int i = 0; i < parts.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        sb.Append(",'\"',");
+                        sb.Append("'\"',");
+                    }
+                    sb.Append("'" + parts[i] + "'");
+                }
+                sb.Append(")");
+                return sb.ToString();
+            }
+            else
+            {
+                return "'" + value + "'";
+            }
+        }
     }
 }
-
