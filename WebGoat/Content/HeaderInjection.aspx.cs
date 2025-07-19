@@ -16,6 +16,9 @@ namespace OWASP.WebGoat.NET
             if (Request.QueryString["Cookie"] != null)
             {
                 HttpCookie cookie = new HttpCookie("UserAddedCookie");
+                cookie.SameSite = System.Web.SameSiteMode.Strict;
+                cookie.Secure = true;
+                cookie.HttpOnly = true;
                 cookie.Value = Request.QueryString["Cookie"];
 
                 Response.Cookies.Add(cookie);

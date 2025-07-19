@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -40,6 +40,15 @@ namespace OWASP.WebGoat.NET
             
                    
             HttpCookie cookie = new HttpCookie("encr_sec_qu_ans");
+            
+                   
+            cookie.SameSite = System.Web.SameSiteMode.Strict;
+            
+                   
+            cookie.Secure = true;
+            
+                   
+            cookie.HttpOnly = true;
 
             //encode twice for more security!
 
